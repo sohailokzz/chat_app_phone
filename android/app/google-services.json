@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1052233301102",
+    "project_id": "upwork-demo-apps",
+    "storage_bucket": "upwork-demo-apps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052233301102:android:3e8834660b46d72320ba7f",
+        "android_client_info": {
+          "package_name": "com.example.upwork_demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052233301102-152p7pp0jpbo0ql5anic0ucguc0os3kf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaoO4AKIA1wIo2IXaEJfi_ha00bxm1Ilo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052233301102-152p7pp0jpbo0ql5anic0ucguc0os3kf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
