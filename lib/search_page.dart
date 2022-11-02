@@ -1,10 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:upwork_demo/chat_room_page.dart';
 import 'package:upwork_demo/models/user_model.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  final UserModel userModel;
+  final User firebaseUser;
+  const SearchPage({
+    super.key,
+    required this.userModel,
+    required this.firebaseUser,
+  });
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -42,7 +50,14 @@ class _SearchPageState extends State<SearchPage> {
           StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection("users")
-                .where("fullName", isEqualTo: searchController.text)
+                .where(
+                  "fullName",
+                  isEqualTo: searchController.text,
+                )
+                .where(
+                  "fullName",
+                  isNotEqualTo: widget.userModel.fullName,
+                )
                 .snapshots(),
             builder: ((context, snapshot) {
               if (snapshot.connectionState == ConnectionState.active) {
@@ -55,6 +70,17 @@ class _SearchPageState extends State<SearchPage> {
 
                     UserModel searchUser = UserModel.fromMap(userMap);
                     return ListTile(
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const ChatRoomPage();
+                            },
+                          ),
+                        );
+                      },
                       leading: CircleAvatar(
                         backgroundColor: Colors.grey[400],
                         backgroundImage: NetworkImage(
@@ -66,6 +92,9 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                       subtitle: Text(
                         searchUser.phoneNumber!,
+                      ),
+                      trailing: const Icon(
+                        Icons.keyboard_arrow_right,
                       ),
                     );
                   } else {

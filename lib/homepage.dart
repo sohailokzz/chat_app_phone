@@ -35,14 +35,17 @@ class _MyHomeState extends State<MyHome> {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return const SearchPage(
-                    // userModel: widget.userModel,
-                    // firebaseUser: widget.firebaseUser,
-                    );
+                return SearchPage(
+                  userModel: widget.userModel,
+                  firebaseUser: widget.firebaseUser,
+                );
               },
             ),
           );
         },
+        child: const Icon(
+          Icons.search,
+        ),
       ),
       body: ListView.builder(
         itemCount: allContacts.length,
