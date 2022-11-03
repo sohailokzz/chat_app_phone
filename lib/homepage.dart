@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:upwork_demo/chat_view.dart';
 import 'package:upwork_demo/data/all_contacts.dart';
 import 'package:upwork_demo/models/user_model.dart';
+import 'package:upwork_demo/phone.dart';
 import 'package:upwork_demo/search_page.dart';
 
 class MyHome extends StatefulWidget {
@@ -28,6 +29,22 @@ class _MyHomeState extends State<MyHome> {
         title: const Text(
           'My Home',
         ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              if (!mounted) return;
+              Navigator.popUntil(context, (route) => route.isFirst);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return const MyPhone();
+                }),
+              );
+            },
+            icon: const Icon(Icons.exit_to_app),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

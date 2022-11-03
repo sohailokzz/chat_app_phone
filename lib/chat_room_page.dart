@@ -1,7 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:upwork_demo/models/chat_room_model.dart';
+import 'package:upwork_demo/models/user_model.dart';
 
 class ChatRoomPage extends StatefulWidget {
-  const ChatRoomPage({super.key});
+  final UserModel targetUser;
+  final ChatRoomModel chatRoom;
+  final UserModel userModel;
+  final User firebaseUser;
+  const ChatRoomPage({
+    super.key,
+    required this.targetUser,
+    required this.chatRoom,
+    required this.userModel,
+    required this.firebaseUser,
+  });
 
   @override
   State<ChatRoomPage> createState() => _ChatRoomPageState();

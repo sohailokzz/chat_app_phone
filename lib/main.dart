@@ -5,8 +5,11 @@ import 'package:upwork_demo/homepage.dart';
 import 'package:upwork_demo/models/firebase_helper.dart';
 import 'package:upwork_demo/models/user_model.dart';
 import 'package:upwork_demo/phone.dart';
+import 'package:uuid/uuid.dart';
 
 import 'firebase_options.dart';
+
+var uuid = const Uuid();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
