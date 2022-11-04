@@ -115,6 +115,7 @@ class _SearchPageState extends State<SearchPage> {
                             await getChatRoom(searchUser);
 
                         if (chatroomModel != null) {
+                          if (!mounted) return;
                           Navigator.pop(context);
                           Navigator.push(
                             context,
