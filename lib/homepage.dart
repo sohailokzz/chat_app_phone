@@ -100,9 +100,12 @@ class _MyHomeState extends State<MyHome> {
                               title: Text(
                                 targetUser.fullName.toString(),
                               ),
-                              subtitle: Text(
-                                chatRoomModel.lastMessage.toString(),
-                              ),
+                              subtitle:
+                                  (chatRoomModel.lastMessage.toString() != "")
+                                      ? Text(
+                                          chatRoomModel.lastMessage.toString(),
+                                        )
+                                      : const Text("Say Hi..!"),
                             );
                           } else {
                             return Container();
