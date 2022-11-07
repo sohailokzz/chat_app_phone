@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:upwork_demo/complete_profile.dart';
+import 'package:upwork_demo/models/ui_helper.dart';
 import 'package:upwork_demo/models/user_model.dart';
 import 'package:upwork_demo/phone.dart';
 
@@ -41,7 +42,6 @@ class _MyVerifyState extends State<MyVerify> {
         )
         .then(
       (value) {
-        print('New User Created');
         getData();
         Navigator.push(
           context,
@@ -72,32 +72,6 @@ class _MyVerifyState extends State<MyVerify> {
 
   @override
   Widget build(BuildContext context) {
-    final defaultPinTheme = PinTheme(
-      width: 56,
-      height: 56,
-      textStyle: const TextStyle(
-          fontSize: 20,
-          color: Color.fromRGBO(30, 60, 87, 1),
-          fontWeight: FontWeight.w600),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: const Color.fromRGBO(234, 239, 243, 1),
-        ),
-        borderRadius: BorderRadius.circular(20),
-      ),
-    );
-
-    final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(color: const Color.fromRGBO(114, 178, 238, 1)),
-      borderRadius: BorderRadius.circular(8),
-    );
-
-    final submittedPinTheme = defaultPinTheme.copyWith(
-      decoration: defaultPinTheme.decoration?.copyWith(
-        color: const Color.fromRGBO(234, 239, 243, 1),
-      ),
-    );
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -158,7 +132,7 @@ class _MyVerifyState extends State<MyVerify> {
                 },
 
                 showCursor: true,
-                onCompleted: (pin) => print(pin),
+                onCompleted: (pin) {},
               ),
               const SizedBox(
                 height: 20,
@@ -183,7 +157,11 @@ class _MyVerifyState extends State<MyVerify> {
                       await auth.signInWithCredential(credential);
                       inputData();
                     } catch (e) {
-                      print(e);
+                      UIHelper.showAlertDialog(
+                        context,
+                        "Error",
+                        "Error Occured",
+                      );
                     }
                   },
                   child: const Text("Verify Phone Number"),

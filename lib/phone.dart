@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:upwork_demo/models/ui_helper.dart';
 import 'package:upwork_demo/verify.dart';
 
 class MyPhone extends StatefulWidget {
@@ -30,6 +31,8 @@ class _MyPhoneState extends State<MyPhone> {
       verificationFailed: (FirebaseAuthException e) {},
       codeSent: (String verificationId, int? resendToken) {
         MyPhone.verify = verificationId;
+
+        UIHelper.showLoadingDialog(context, "Loading...");
 
         Navigator.push(
           context,
@@ -143,8 +146,6 @@ class _MyPhoneState extends State<MyPhone> {
                   ),
                   onPressed: () {
                     signUp();
-
-                    // Navigator.pushNamed(context, 'verify');
                   },
                   child: const Text("Send the code"),
                 ),

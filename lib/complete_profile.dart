@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:upwork_demo/homepage.dart';
+import 'package:upwork_demo/models/ui_helper.dart';
 import 'package:upwork_demo/models/user_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -39,7 +40,11 @@ class _CompleteProfileState extends State<CompleteProfile> {
         imageFile = pickImage;
       });
     } on PlatformException catch (e) {
-      print(e);
+      UIHelper.showAlertDialog(
+        context,
+        "Error",
+        e.message.toString(),
+      );
     }
   }
 
@@ -89,13 +94,14 @@ class _CompleteProfileState extends State<CompleteProfile> {
     String fullname = fullNameController.text.trim();
 
     if (fullname == "" || imageFile == null) {
-      print("Please fill all the fields");
+      UIHelper.showAlertDialog(context, 'Incomplete', "Fill all fields");
     } else {
       uploadData();
     }
   }
 
   void uploadData() async {
+    UIHelper.showLoadingDialog(context, "Uploading image...");
     UploadTask uploadTask = FirebaseStorage.instance
         .ref("profilepictures")
         .child(widget.userModel.uid.toString())
