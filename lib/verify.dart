@@ -124,13 +124,9 @@ class _MyVerifyState extends State<MyVerify> {
               ),
               Pinput(
                 length: 6,
-                // defaultPinTheme: defaultPinTheme,
-                // focusedPinTheme: focusedPinTheme,
-                // submittedPinTheme: submittedPinTheme,
                 onChanged: (value) {
                   code = value;
                 },
-
                 showCursor: true,
                 onCompleted: (pin) {},
               ),

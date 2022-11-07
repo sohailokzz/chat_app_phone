@@ -48,90 +48,94 @@ class _MyHomeState extends State<MyHome> {
           ),
         ],
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection("chatRoom")
-            .where("participant.${widget.userModel.uid}", isEqualTo: true)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.active) {
-            if (snapshot.hasData) {
-              QuerySnapshot chatRoomSnapshot = snapshot.data as QuerySnapshot;
-              return ListView.builder(
-                itemCount: chatRoomSnapshot.docs.length,
-                itemBuilder: (context, index) {
-                  ChatRoomModel chatRoomModel = ChatRoomModel.fromMap(
-                    chatRoomSnapshot.docs[index].data() as Map<String, dynamic>,
-                  );
-                  Map<String, dynamic> participants =
-                      chatRoomModel.participant!;
-                  List<String> participantKey = participants.keys.toList();
-                  participantKey.remove(widget.userModel.uid);
+      body: Container(
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection("chatRoom")
+              .where("allUsers", arrayContains: widget.userModel.uid)
+              .orderBy("createdon")
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.active) {
+              if (snapshot.hasData) {
+                QuerySnapshot chatRoomSnapshot = snapshot.data as QuerySnapshot;
+                return ListView.builder(
+                  itemCount: chatRoomSnapshot.docs.length,
+                  itemBuilder: (context, index) {
+                    ChatRoomModel chatRoomModel = ChatRoomModel.fromMap(
+                      chatRoomSnapshot.docs[index].data()
+                          as Map<String, dynamic>,
+                    );
+                    Map<String, dynamic> participants =
+                        chatRoomModel.participant!;
+                    List<String> participantKey = participants.keys.toList();
+                    participantKey.remove(widget.userModel.uid);
 
-                  return FutureBuilder(
-                    future: FirebaseHelper.getUserModel(participantKey[0]),
-                    builder: (context, userData) {
-                      if (userData.connectionState == ConnectionState.done) {
-                        if (userData.data != null) {
-                          UserModel targetUser = userData.data as UserModel;
-                          return ListTile(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return ChatRoomPage(
-                                      targetUser: targetUser,
-                                      chatRoom: chatRoomModel,
-                                      userModel: widget.userModel,
-                                      firebaseUser: widget.firebaseUser,
-                                    );
-                                  },
+                    return FutureBuilder(
+                      future: FirebaseHelper.getUserModel(participantKey[0]),
+                      builder: (context, userData) {
+                        if (userData.connectionState == ConnectionState.done) {
+                          if (userData.data != null) {
+                            UserModel targetUser = userData.data as UserModel;
+                            return ListTile(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return ChatRoomPage(
+                                        targetUser: targetUser,
+                                        chatRoom: chatRoomModel,
+                                        userModel: widget.userModel,
+                                        firebaseUser: widget.firebaseUser,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                  targetUser.profileImage.toString(),
                                 ),
-                              );
-                            },
-                            leading: CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                targetUser.profileImage.toString(),
                               ),
-                            ),
-                            title: Text(
-                              targetUser.fullName.toString(),
-                            ),
-                            subtitle:
-                                (chatRoomModel.lastMessage.toString() != "")
-                                    ? Text(
-                                        chatRoomModel.lastMessage.toString(),
-                                      )
-                                    : const Text("Say Hi..!"),
-                          );
+                              title: Text(
+                                targetUser.fullName.toString(),
+                              ),
+                              subtitle:
+                                  (chatRoomModel.lastMessage.toString() != "")
+                                      ? Text(
+                                          chatRoomModel.lastMessage.toString(),
+                                        )
+                                      : const Text("Say Hi..!"),
+                            );
+                          } else {
+                            return Container();
+                          }
                         } else {
                           return Container();
                         }
-                      } else {
-                        return Container();
-                      }
-                    },
-                  );
-                },
-              );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  snapshot.error.toString(),
-                ),
-              );
+                      },
+                    );
+                  },
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    snapshot.error.toString(),
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: Text('No Chats'),
+                );
+              }
             } else {
               return const Center(
-                child: Text('No Chats'),
+                child: CircularProgressIndicator(),
               );
             }
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
